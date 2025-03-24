@@ -1,0 +1,9 @@
+parameters:
+    level: 10
+    ignoreErrors:
+        - '#Property App\\Domain\\Model\\Fleet::\$id \(int\|null\) is never assigned int so it can be removed from the property type\.#'
+        - '#Property App\\Domain\\Model\\Location::\$id \(int\|null\) is never assigned int so it can be removed from the property type\.#'
+        - '#Property App\\Domain\\Model\\Vehicle::\$id \(int\|null\) is never assigned int so it can be removed from the property type\.#'
+
+    paths:
+        - src/

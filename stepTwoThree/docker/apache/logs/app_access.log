@@ -1,0 +1,2 @@
+172.21.0.1 - - [21/Mar/2025:19:03:35 +0000] "GET / HTTP/1.1" 404 32260 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
+172.21.0.1 - - [21/Mar/2025:19:04:28 +0000] "-" 408 - "-" "-"
