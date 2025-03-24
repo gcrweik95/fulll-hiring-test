@@ -178,6 +178,11 @@ php bin/console fleet:localize-vehicle "First Fleet" "ABC123" 43.2 5.4
 
 ---
 
+
+Below is a snapshot showing all three workflows in action — StepTwoThree CI, StepOne CI, and Documentation Update — each triggered by the appropriate changes and completing successfully:
+
+![CI Worklows Run](./workflows.jpg)
+
 ### Expected Results
 
 **Behat:**
