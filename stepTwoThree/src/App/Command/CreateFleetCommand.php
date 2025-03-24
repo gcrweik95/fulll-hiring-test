@@ -12,7 +12,6 @@ class CreateFleetCommand
 
     public function getFleetId() : string
     {
-        // This is a test 4
         return $this->fleetId;
     }
 }
