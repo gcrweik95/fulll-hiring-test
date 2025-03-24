@@ -1,0 +1,63 @@
+name: Symfony CI
+
+on:
+  push:
+    paths:
+      - "stepTwoThree/**"
+  pull_request:
+    paths:
+      - "stepTwoThree/**"
+
+jobs:
+  symfony_ci:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mariadb:10.4.22
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: fulll
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping -h localhost" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          extensions: mbstring, pdo_mysql
+          tools: composer
+
+      - name: Install Dependencies
+        run: composer install --prefer-dist --no-progress
+        working-directory: stepTwoThree
+
+      - name: Cache Composer Dependencies
+        uses: actions/cache@v3
+        with:
+          path: stepTwoThree/vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('stepTwoThree/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Setup the Database
+        run: |
+          php bin/console doctrine:database:create --if-not-exists
+          php bin/console doctrine:migrations:migrate --no-interaction
+        working-directory: stepTwoThree
+        env:
+          DATABASE_URL: "mysql://root:root@127.0.0.1:3306/fulll?serverVersion=mariadb-10.4.22&charset=utf8mb4"
+
+      - name: Run PHPStan
+        run: vendor/bin/phpstan analyse
+        working-directory: stepTwoThree
+
+      - name: Run Behat Tests
+        run: vendor/behat/behat/bin/behat
+        working-directory: stepTwoThree
+        env:
+          DATABASE_URL: "mysql://root:root@127.0.0.1:3306/fulll?serverVersion=mariadb-10.4.22&charset=utf8mb4"

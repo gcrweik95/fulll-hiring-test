@@ -1,0 +1,16 @@
+name: Documentation Update
+
+on:
+  push:
+    paths:
+      - "README.md"
+  pull_request:
+    paths:
+      - "README.md"
+
+jobs:
+  no_op:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Skip CI – Only README changed
+        run: echo "README.md was updated – skipping CI jobs."
