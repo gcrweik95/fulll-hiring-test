@@ -139,9 +139,42 @@ php bin/console fleet:localize-vehicle "First Fleet" "ABC123" 43.2 5.4
 
 ---
 
-### CI/CD Process
+### CI Workflows
 
-To be completed
+
+#### ✅ **StepOne CI (`stepone-ci.yml`)**
+
+> Runs when files inside the `stepOne/` directory are modified.
+
+- Sets up a **PHP 8.2 environment** using GitHub Actions.
+- Installs Composer dependencies.
+- Runs **Behat tests** against an in-memory persistence setup (no DB required).
+- Designed for a lightweight native PHP boilerplate with no external service dependencies.
+- Skips CI if tests fail.
+
+---
+
+#### ✅ **StepTwoThree CI (`steptwothree-ci.yml`)**
+
+> Runs when files inside the `stepTwoThree/` directory are modified.
+
+- Uses **PHP 8.2** and sets up a **MySQL service** using GitHub Actions' built-in `services`.
+- Overrides `DATABASE_URL` to use `127.0.0.1`, ensuring Symfony and Doctrine can connect to MySQL in the CI environment (instead of the Docker alias `mysql`).
+- Installs dependencies with Composer.
+- Runs **PHPStan (level 10)** for static analysis.
+- Runs **Behat tests**, including database truncation between scenarios using `DatabaseEmptyService`.
+- Composer dependencies are cached to speed up builds.
+- Pipeline fails if static analysis or tests fail.
+
+---
+
+#### ✅ **Docs CI (`docs.yml`)**
+
+> Runs only when `README.md` is modified.
+
+- Performs a no-op build with a log message:  
+  `"README.md was updated – skipping CI jobs."`
+- Skips unnecessary builds when only documentation changes occur.
 
 ---
 
